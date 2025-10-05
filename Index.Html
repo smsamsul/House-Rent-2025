@@ -80,6 +80,13 @@
       font-size: 16px;
       cursor: pointer;
     }
+    #successMessage {
+      display: none;
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -107,13 +114,14 @@
 
 <div class="contact-form" id="contactForm">
   <h2>Contact Us</h2>
-  <form action="https://formsubmit.co/smsamsulhaque10@gmail.com" method="POST">
+  <form action="https://formsubmit.co/smsamsulhaque10@gmail.com" method="POST" onsubmit="submitForm(event)">
     <input type="text" name="name" placeholder="Your Name" required>
     <input type="text" name="zip" placeholder="Zip Code" required>
     <input type="text" name="area" placeholder="Area" required>
     <input type="tel" name="phone" placeholder="Phone Number" required>
     <button type="submit">Submit</button>
   </form>
+  <p id="successMessage">Successfully Done!</p>
 </div>
 
 <script>
@@ -121,6 +129,25 @@
     const form = document.getElementById('contactForm');
     form.style.display = form.style.display === 'block' ? 'none' : 'block';
     window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
+  }
+
+  function submitForm(event) {
+    event.preventDefault(); // Prevent default FormSubmit redirect
+    const form = event.target;
+    const successMessage = document.getElementById('successMessage');
+
+    // Submit form data via fetch
+    fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+    }).then(response => {
+      if (response.ok) {
+        successMessage.style.display = "block"; // Show success message
+        form.reset(); // Clear form fields
+      }
+    }).catch(error => {
+      alert("Something went wrong!");
+    });
   }
 </script>
 
